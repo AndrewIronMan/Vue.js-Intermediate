@@ -1,10 +1,13 @@
 import paginate from '../../../helpers/paginate';
-import postFilterById from '../../../helpers/postFilterById';
 
 const getters = {
   getPosts: (state) => (query) => {
     if (query?.userId) {
-      return paginate(postFilterById(state.posts, query?.userId), query?.nextPage, query?.perPage);
+      return paginate(
+        state.posts.filter((post) => post.userId === query?.userId),
+        query?.nextPage,
+        query?.perPage,
+      );
     }
     return paginate(state.posts, query?.nextPage, query?.perPage);
   },

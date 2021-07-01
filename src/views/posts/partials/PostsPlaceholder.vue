@@ -1,6 +1,6 @@
 <template>
   <div class='flex-container'>
-   <div class='text-center'> Posts do not exist</div>
+   <div > Posts do not exist</div>
   </div>
 </template>
 
@@ -12,10 +12,10 @@ export default {
 
 <style lang="scss" scoped>
 .flex-container{
-  height: 84.5vh;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-
+  align-items: center;
 }
 </style>

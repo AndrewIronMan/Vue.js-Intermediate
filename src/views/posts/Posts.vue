@@ -1,6 +1,6 @@
 <template>
-    <div >
-      <div class='content px-5 py-4 pt-10'>
+    <div class='wrap' >
+      <div class='content  px-5 py-4 pt-10'>
         <PostsFilterComponent
           v-on:setAuthor='setAuthor'
           :authors='authorsName'
@@ -27,6 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import redirectTo from '../../helpers/redirectTo';
 
 export default {
   name: 'PostsComponent',
@@ -48,19 +49,16 @@ export default {
   methods: {
     setPerPage(val) {
       this.perPage = +val;
-      this.$router.push({ query: { ...this.$route.query, perPage: val } })
-        .catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
+      redirectTo({ query: { ...this.$route.query, perPage: val } });
     },
     setNextPage(page) {
-      this.nextPage = page;
-      this.$router.push({ query: { ...this.$route.query, currentPage: page } })
-        .catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
+      this.nextPage = +page;
+      redirectTo({ query: { ...this.$route.query, currentPage: page } });
     },
     setAuthor(author) {
       const authorId = this.getAuthors.find((item) => item.username === author)?.id;
       this.author = authorId;
-      this.$router.push({ params: { userId: authorId }, query: this.$route.query })
-        .catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
+      redirectTo({ params: { userId: authorId }, query: { ...this.$route.query } });
     },
     initFilterParams() {
       if (this.$route.query.perPage) this.perPage = +this.$route.query.perPage;
@@ -73,46 +71,41 @@ export default {
       }
     },
     setSearchString() {
-      this.$router.push({
+      redirectTo({
         query: {
           ...this.$route.query,
           perPage: +this.perPage,
           currentPage: +this.nextPage,
         },
         params: { userId: this.$route.params.userId ? this.$route.params.userId : 'All' },
-      }).catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
+      });
     },
-
   },
   computed: {
     ...mapGetters({
       postsGetter: 'posts/getPosts',
       getAuthors: 'authors/getAuthors',
     }),
-
     authorsName() {
       return this.getAuthors.map((author) => author.username);
     },
     posts() {
       if (this.userId && this.userId !== 'All') {
-        const posts = this.postsGetter(
+        return this.postsGetter(
           {
             userId: this.author,
             nextPage: this.nextPage,
             perPage: this.perPage,
           },
         );
-        return posts;
       }
-      const posts = this.postsGetter({
+      return this.postsGetter({
         nextPage: this.nextPage,
         perPage: this.perPage,
       });
-      return posts;
     },
     authorName() {
-      const initAuthorName = this.getAuthors.find((item) => item.id === this.author)?.username;
-      return initAuthorName;
+      return this.getAuthors.find((item) => item.id === this.author)?.username;
     },
   },
   watch: {
@@ -124,25 +117,23 @@ export default {
         oldVal,
       ) {
         if ((newVal.meta.totalPages < oldVal.meta.currentPage)
-            && (newVal.meta.currentPage < oldVal.meta.currentPage)
-            && (newVal.meta.perPage > oldVal.meta.perPage)
+            || ((newVal.meta.currentPage < oldVal.meta.currentPage)
+            && (newVal.meta.perPage > oldVal.meta.perPage))
         ) {
           const currentPage = oldVal.meta.currentPage ? oldVal.meta.currentPage : 1;
           this.nextPage = newVal.meta.currentPage > 0
             ? newVal.meta.currentPage : currentPage;
-          this.$router.push({
+          redirectTo({
             query: {
               ...this.$route.query,
               currentPage: newVal.meta.currentPage > 0
                 ? newVal.meta.currentPage : currentPage,
             },
-          })
-            .catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
+          });
         }
       },
     },
   },
-
   created() {
     this.initFilterParams();
   },

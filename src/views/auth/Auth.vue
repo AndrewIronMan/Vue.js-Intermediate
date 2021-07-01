@@ -41,44 +41,16 @@
         </validation-provider>
         <validation-provider
           v-slot="{ errors }"
-          :rules="{
-            required: true
-          }"
-          name="checkbox"
+          :rules="{required:true}"
+          name="agree"
         >
           <div class="custom-checbox-class">
-            <v-checkbox v-model="agree" :error-messages="errors">
+            <v-checkbox v-model="agree" required :error-messages="errors">
             </v-checkbox>
-              <div class="text-center dialog">
-                <v-dialog v-model="dialog" width="600">
-                  <template v-slot:activator="{ on, attrs }">
-                    <a v-bind="attrs" v-on.stop="on">
-                      I agree with Terms & Conditions
-                    </a>
-                  </template>
-
-                  <v-card>
-                    <v-card-title class="text-h5 grey lighten-2">
-                      Terms & Conditions
-                    </v-card-title>
-                    <v-card-text>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                      non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </v-card-text>
-                    <v-divider></v-divider>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="primary" text @click.stop="dialog = false">
-                        I accept
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </div>
+            <TermsConditionsDialog
+              :dialogTitle='mockTexts.dialogTitle'
+              :dialogBody='mockTexts.dialogBody'
+            :linkText='mockTexts.linkText'/>
           </div>
         </validation-provider>
         <v-btn class="mr-4" type="submit" :disabled="!(agree === true && !invalid)">
@@ -97,7 +69,10 @@ import {
   extend, ValidationObserver, ValidationProvider, setInteractionMode,
 } from 'vee-validate';
 import { mapActions } from 'vuex';
+import TermsConditionsDialog from '../partials/TermsConditionsDialog.vue';
 import routerConfig from '../../configs/routerConfig';
+import redirectTo from '../../helpers/redirectTo';
+import mockTexts from '../../mocks/texts';
 
 setInteractionMode('eager');
 
@@ -111,10 +86,6 @@ extend('min', {
   message: '{_field_} may not be less than {length} characters',
 });
 
-extend('changed', {
-  ...min,
-  message: '{_field_} may not be less than {length} characters',
-});
 extend('regex', {
   ...regex,
   message: '{_field_} must contain uppercase and lowercase characters, number and a symbol',
@@ -130,14 +101,15 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
+    TermsConditionsDialog,
   },
   data: () => ({
+    mockTexts,
     genderList: ['Female', 'Male'],
     gender: '',
     password: '',
     email: '',
     agree: null,
-    dialog: false,
   }),
 
   methods: {
@@ -154,7 +126,7 @@ export default {
       if (!ready) {
         return;
       }
-      this.$router.push(`${routerConfig.Posts}/All`);
+      redirectTo({ path: `${routerConfig.Posts}/All` });
     },
     clear() {
       this.email = '';

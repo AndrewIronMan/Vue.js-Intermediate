@@ -48,12 +48,8 @@ export default {
     margin-bottom: 50px;
   }
   .select{
-    left: 50%;
+    left:calc( 50% - 25px );
     top: 35px;
   }
 }
-// > 760 px
-// .wraper[data-v-127d3ff4] {
-//     position: relative;
-//     margin-bottom: 40px;
 </style>

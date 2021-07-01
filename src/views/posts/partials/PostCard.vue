@@ -1,7 +1,7 @@
 <template>
  <v-card
     max-width="344"
-    v-on:click = 'redirectTo'
+    v-on:click = 'redirectTo({ path:`${routerConfig.Post}/${post.id}`})'
   >
     <v-card-text>
       <div>{{post.title}}</div>
@@ -14,17 +14,14 @@
 
 <script>
 import routerConfig from '../../../configs/routerConfig';
+import redirectTo from '../../../helpers/redirectTo';
 
 export default {
   name: 'PostCardComponent',
+  data: () => ({
+    redirectTo,
+    routerConfig,
+  }),
   props: ['post'],
-  methods: {
-    redirectTo() {
-      this.$router.push(`${routerConfig.Post}/${this.post.id}`);
-    },
-  },
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

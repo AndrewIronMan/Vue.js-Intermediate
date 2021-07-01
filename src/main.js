@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.use(VueRouter);
 
-new Vue({
+export default new Vue({
   router,
   store,
   vuetify,

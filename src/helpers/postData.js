@@ -1,4 +1,4 @@
-export default async function (url = '', body) {
+export default async (url = '', body) => {
   const response = await fetch(url, {
     method: 'POST',
     mode: 'cors',
@@ -10,4 +10,4 @@ export default async function (url = '', body) {
     body: JSON.stringify(body),
   });
   return response.json();
-}
+};

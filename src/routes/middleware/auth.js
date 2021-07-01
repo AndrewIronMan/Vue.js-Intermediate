@@ -1,9 +1,9 @@
 import routerConfig from '../../configs/routerConfig';
 
 export default function auth({
-  next, store, to, from,
+  next, store, from,
 }) {
-  if (store.state.auth.isLogined && to !== from) {
+  if (store.state.auth.isLogined) {
     next();
     return;
   }

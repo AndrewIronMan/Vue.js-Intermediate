@@ -8,15 +8,15 @@
       </router-link>
       <v-spacer></v-spacer>
       <ul class="linkList">
-        <li v-if="isShowPosts">
-          <span v-on:click="$router.push({
-            path:`${routerConfig.Posts}/All`, query:{ currentPage: 1 }})">Posts</span>
+        <li v-if="isShowPosts && isLogined">
+          <span v-on:click="redirectTo({
+            path:`${routerConfig.Posts}/All`,query:{ currentPage: 1, perPage:10 }})">Posts</span>
         </li>
         <li v-if="isLogined">
           <span v-on:click="logout">Logout</span>
         </li>
         <li v-else>
-          <span v-on:click="$router.push(routerConfig.Auth)">Auth</span>
+          <span v-on:click="redirectTo({ path:routerConfig.Auth})">Auth</span>
         </li>
       </ul>
     </v-app-bar>
@@ -26,10 +26,12 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import routerConfig from '../../configs/routerConfig';
+import redirectTo from '../../helpers/redirectTo';
 
 export default {
   name: 'Header',
   data: () => ({
+    redirectTo,
     routerConfig,
     isShowPosts: true,
     isShowAuth: true,
@@ -52,7 +54,7 @@ export default {
     },
     isLogined(newVal, oldVal) {
       if (newVal === false && oldVal === true) {
-        this.$router.push(routerConfig.Auth);
+        redirectTo({ path: routerConfig.Auth });
       }
     },
   },
