@@ -1,7 +1,6 @@
 export default (arr, nextPage, perPage) => {
   const skip = nextPage && nextPage > 1 ? nextPage * perPage - perPage : 0;
   const limit = perPage || 10;
-  console.log('skip', skip, 'limit', limit);
   return {
     posts: arr.slice(
       nextPage < Math.ceil(arr.length / limit)

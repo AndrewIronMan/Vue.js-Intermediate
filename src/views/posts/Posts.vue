@@ -63,7 +63,7 @@ export default {
         .catch((error) => { if (error.name !== 'NavigationDuplicated') { throw error; } });
     },
     initFilterParams() {
-      if (this.$route.query.perPage) this.setPerPage(+this.$route.query.perPage);
+      if (this.$route.query.perPage) this.perPage = +this.$route.query.perPage;
       if (this.$route.query.perPage) this.initPerPage = +this.$route.query.perPage;
       if (this.$route.params.userId) this.author = +this.$route.params.userId;
       if (this.$route.query.currentPage) {
