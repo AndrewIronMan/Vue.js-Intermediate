@@ -1,9 +1,10 @@
 import routerConfig from '../../configs/routerConfig';
+import tokenHelper from '../../helpers/tokenHelper';
 
 export default function auth({
   next, store, from,
 }) {
-  if (store.state.auth.isLogined) {
+  if (tokenHelper.check() && store.state.auth.isLogined) {
     next();
     return;
   }

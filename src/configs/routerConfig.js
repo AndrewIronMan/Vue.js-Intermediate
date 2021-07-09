@@ -3,5 +3,6 @@ export default {
   Posts: '/posts',
   Post: '/post',
   Auth: '/registration',
+  Logout: '/logout',
   NotFound: '*',
 };

@@ -1,12 +1,13 @@
 <template>
   <div class='flex-container'>
-   <div > Posts do not exist</div>
+   <div >{{text}}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'PostsPlaceholderComponent',
+  props: ['text'],
 };
 </script>
 

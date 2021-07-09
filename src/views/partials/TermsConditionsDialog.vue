@@ -2,9 +2,9 @@
     <div class="text-center dialog">
         <v-dialog v-model="dialog" width="600">
         <template v-slot:activator="{ on, attrs }">
-            <a v-bind="attrs" v-on.stop="on">
+            <button name='openDialog' v-on:click.prevent v-bind="attrs" v-on.stop="on">
              {{linkText}}
-            </a>
+            </button>
         </template>
 
         <v-card>

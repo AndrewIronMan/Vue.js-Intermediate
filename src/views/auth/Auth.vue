@@ -21,7 +21,6 @@
         >
           <v-text-field
             v-model="password"
-            :counter="8"
             :error-messages="errors"
             label="Password"
             type="password"
@@ -62,39 +61,16 @@
 </template>
 
 <script>
-import {
-  required, email, min, regex,
-} from 'vee-validate/dist/rules';
-import {
-  extend, ValidationObserver, ValidationProvider, setInteractionMode,
-} from 'vee-validate';
+import { ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
 import { mapActions } from 'vuex';
 import TermsConditionsDialog from '../partials/TermsConditionsDialog.vue';
 import routerConfig from '../../configs/routerConfig';
 import redirectTo from '../../helpers/redirectTo';
 import mockTexts from '../../mocks/texts';
+import authFormRukes from '../../helpers/authFormRukes';
 
 setInteractionMode('eager');
-
-extend('required', {
-  ...required,
-  message: '{_field_} can not be empty',
-});
-
-extend('min', {
-  ...min,
-  message: '{_field_} may not be less than {length} characters',
-});
-
-extend('regex', {
-  ...regex,
-  message: '{_field_} must contain uppercase and lowercase characters, number and a symbol',
-});
-
-extend('email', {
-  ...email,
-  message: 'Email must be valid',
-});
+authFormRukes()();
 
 export default {
   name: 'AuthComponent',
@@ -122,13 +98,13 @@ export default {
         agree: this.agree,
         gender: this.gender,
       });
-      this.clear();
+      this.reset();
       if (!ready) {
         return;
       }
       redirectTo({ path: `${routerConfig.Posts}/All` });
     },
-    clear() {
+    reset() {
       this.email = '';
       this.password = '';
       this.agree = '';

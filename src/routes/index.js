@@ -1,5 +1,6 @@
 import routerConfig from '../configs/routerConfig';
 import auth from './middleware/auth';
+import store from '../store/modules/index';
 
 
 const routes = [
@@ -30,6 +31,14 @@ const routes = [
     path: routerConfig.Auth,
     name: 'Auth',
     component: () => import('../views/auth/Auth.vue'),
+  },
+  {
+    path: routerConfig.Logout,
+    name: 'Logout',
+    beforeEnter: (to, from, next) => {
+      store.dispatch('auth/logout');
+      next();
+    },
   },
   {
     path: routerConfig.NotFound,

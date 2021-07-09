@@ -1,19 +1,21 @@
-export default (arr, nextPage, perPage) => {
+export default (arrPosts, nextPage, perPage) => {
   const skip = nextPage && nextPage > 1 ? nextPage * perPage - perPage : 0;
   const limit = perPage || 10;
   return {
-    posts: arr.slice(
-      nextPage < Math.ceil(arr.length / limit)
+    posts: arrPosts.slice(
+      nextPage < Math.ceil(arrPosts.length / limit)
         ? skip
-        : Math.ceil(arr.length / limit) * perPage - perPage,
-      limit ? skip + limit : arr.length,
+        : Math.ceil(arrPosts.length / limit) * perPage - perPage,
+      limit ? skip + limit : arrPosts.length,
     ),
     meta: {
       currentPage:
-        nextPage > Math.ceil(arr.length / limit) ? Math.ceil(arr.length / limit) : nextPage || 1,
+        nextPage > Math.ceil(arrPosts.length / limit)
+          ? Math.ceil(arrPosts.length / limit)
+          : nextPage || 1,
       perPage: limit,
-      total: arr.length,
-      totalPages: Math.ceil(arr.length / limit),
+      total: arrPosts.length,
+      totalPages: Math.ceil(arrPosts.length / limit),
     },
   };
 };

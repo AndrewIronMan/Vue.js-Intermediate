@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import tokenHelper from './helpers/tokenHelper';
 
 export default {
   name: 'App',
@@ -15,15 +15,8 @@ export default {
     Header: () => import('./views/partials/Header.vue'),
     Footer: () => import('./views/partials/Footer.vue'),
   },
-  methods: {
-    ...mapActions({
-      getAuthors: 'authors/getAuthors',
-      getPostsAction: 'posts/getPosts',
-    }),
-  },
   created() {
-    this.getAuthors();
-    this.getPostsAction();
+    tokenHelper.check();
   },
 };
 </script>
